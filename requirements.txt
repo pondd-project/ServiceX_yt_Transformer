@@ -1,0 +1,11 @@
+yt
+servicex-transformer
+pika
+rabbitmq
+requests
+pyarrow
+pandas
+psutil
+netcdf4
+astropy
+h5py
