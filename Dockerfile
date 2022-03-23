@@ -1,9 +1,10 @@
 FROM ubuntu:18.04
 
-WORKDIR /servicex
+WORKDIR /tmp/servicex/
 
 RUN apt-get update && \
     apt-get install --reinstall -y build-essential \
+    -y mpich \
     -y python3-pip && \
     ln -s /usr/bin/python3 /usr/bin/python
 
@@ -16,9 +17,6 @@ RUN python3 -m pip install -r requirements.txt
 ENV PYTHONUNBUFFERED=1
 
 # Copy over the source
-COPY transformer.py \
-     validate_requests.py \
-     ./
+COPY transform_data.py .
 
-RUN useradd -ms /bin/bash output -G sudo && passwd -d output
-RUN chgrp -R 0 /home/output && chmod -R g+rwX /home/output
+ENV PYTHONPATH "${PYTHONPATH}:/tmp/servicex"
