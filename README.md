@@ -63,3 +63,7 @@ backend_types:
   - type: python
     return_data: parquet
 ```
+
+## Sidecar Container
+
+Running the transformer as a sidecar, the user writes the transform function to take a file-path (the download URI) and an output-path (where to save the files). The ServiceX sidecar transformer will handle the ServiceX bits.
