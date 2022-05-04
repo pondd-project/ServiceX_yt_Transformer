@@ -48,17 +48,14 @@ def transform_data(file_path, output_path):
     logger = logging.getLogger(file_path)
     logger.info(f"Transforming data: {file_path}")
 
-    if not os.path.isdir(output_path):
-        os.makedirs(output_path)
-
     try:
         start_transform = time.time()
         # download data
-        if not os.path.isdir(output_path + '/data'):
-            os.makedirs(output_path + '/data')
+        if not os.path.isdir('data'):
+            os.makedirs('data')
         with requests.get(file_path, stream=True) as response:
             response.raise_for_status()
-            zip_file = os.path.join(output_path,'data','data.zip')
+            zip_file = os.path.join('data','data.zip')
             with open(zip_file, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192): 
                     f.write(chunk)
@@ -82,13 +79,12 @@ def transform_data(file_path, output_path):
                 table = pa.Table.from_pandas(df)
                 pq_filename = filepath.strip('/').rsplit('/',1)[1] + '.parquet'
                 pq_filepath = os.path.join(output_path,pq_filename)
-                if output_path:
-                    writer = pq.ParquetWriter(pq_filepath,table.schema)
-                    writer.write_table(table=table)
-                    writer.close()
-                    output_size = os.stat(pq_filepath).st_size
-                    logger.info("Wrote {} bytes after transforming {}".format(output_size, pq_filepath))
-                    status.append(0)
+                writer = pq.ParquetWriter(pq_filepath,table.schema)
+                writer.write_table(table=table)
+                writer.close()
+                output_size = os.stat(pq_filepath).st_size
+                logger.info("Wrote {} bytes after transforming {}".format(output_size, pq_filepath))
+                status.append(0)
             
             except BaseException as error:
                 mesg = f"Problem loading data {file_path}: {error}"
