@@ -102,7 +102,7 @@ def transform_data(file_path, output_path):
             raise Exception(msg)
 
     except Exception as error:
-        mesg = f"Failed to transform input file {file_path}: {error}"
+        mesg = f"Fatal: Failed to transform input file {file_path}: {error}"
         logger.exception(mesg)
 
 def compile_code():
